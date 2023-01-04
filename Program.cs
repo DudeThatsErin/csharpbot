@@ -23,7 +23,7 @@ namespace csharpbot
         public Program()
         {
             _configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables(prefix: "DC_")
+                .AddEnvironmentVariables(prefix: "bot_")
                 .AddJsonFile("bot_info.json", optional: true)
                 .Build();
 
