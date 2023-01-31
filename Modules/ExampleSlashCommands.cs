@@ -34,9 +34,19 @@ namespace csharpbot.Modules
         public async Task GreetUserAsync()
             => await RespondAsync(text: $":ping_pong: It took me {Context.Client.Latency}ms to respond to you!", ephemeral: true);
 
-        [SlashCommand("bitrate", "Gets the bitrate of a specific voice channel.")]
-        public async Task GetBitrateAsync([ChannelTypes(ChannelType.Voice, ChannelType.Stage)] IChannel channel)
-            => await RespondAsync(text: $"This voice channel has a bitrate of {(channel as IVoiceChannel).Bitrate}");
+        [SlashCommand("dm_a_user", "Pops up a modal that allows you to DM a user")]
+        public async Task DMUser()
+        {
+            // send a modal
+            var mb = new ModalBuilder()
+                .WithTitle("DM a User")
+                .WithCustomId("dm_user")
+                .AddTextInput("Who would you like to message?", "input_username", placeholder: "venomoushappy#8736")
+                .AddTextInput("What would you like to say?", "input_words", TextInputStyle.Paragraph, placeholder: "I just need to DM you something!");
+
+                await Context.Interaction.RespondWithModalAsync(mb.Build());
+
+        }
 
         // [Group] will create a command group. [SlashCommand]s and [ComponentInteraction]s will be registered with the group prefix
         [Group("test_group", "This is a command group")]

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Discord.Interactions.Builders;
 
 namespace csharpbot
 {
@@ -53,8 +54,23 @@ namespace csharpbot
                 await _handler.RegisterCommandsGloballyAsync(true);
         }
 
+
+
         private async Task HandleInteraction(SocketInteraction interaction)
         {
+            _client.ModalSubmitted += async modal =>
+            {
+                List<SocketMessageComponentData> components = modal.Data.Components.ToList();
+                string user = components.First(x => x.CustomId == "input_user").Value;
+                string input = components.First(x => x.CustomId == "input_message").Value;
+
+                string message = "Hello" + $"{modal.User.Mention} just DM'd " + $"${user} to say {input}";
+
+                AllowedMentions mentions = new AllowedMentions();
+                mentions.AllowedTypes = AllowedMentionTypes.Users;
+
+                await modal.RespondAsync(message, allowedMentions: mentions);
+            };
             try
             {
                 // Create an execution context that matches the generic type parameter of your InteractionModuleBase<T> modules.
